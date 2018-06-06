@@ -17,3 +17,10 @@ spring:
     url: jdbc:mysql://192.168.1.103:3306/eshop?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC # 连接Win7本地的MySQL数据库
     username: root
     password: root
+
+# springboot整合mybatis配置数据库下划线字段转驼峰
+# 在设计数据库时一般会把多个单词之间用下划线隔开，如user_account，而在java实体类中使用驼峰命名，如userAccount。
+# 为了应对这种情况，mybatis已经做了很好的支持，不需要在一个个的手动映射，只要配置mybatis.configuration.map-underscore-to-camel-case属性就行了。
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
