@@ -3,6 +3,7 @@ package com.wm.eshop.inventory.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
 import com.wm.eshop.inventory.mapper.ProductInventoryMapper;
 import com.wm.eshop.inventory.model.ProductInventory;
 import com.wm.eshop.inventory.service.ProductInventoryService;
@@ -39,6 +40,19 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
 
 	public ProductInventory findById(Long id) {
 		return productInventoryMapper.findById(id);
+	}
+
+	public ProductInventory findByProductId(Long productId) {
+		
+		Jedis jedis = jedisPool.getResource();
+		String dataJson = jedis.get("product_inventory_" + productId);
+		if (!Strings.isNullOrEmpty(dataJson)) {
+			JSONObject dataJSONObject = JSONObject.parseObject(dataJson);
+			dataJSONObject.put("id", "-1");
+			return JSONObject.parseObject(dataJSONObject.toJSONString(), ProductInventory.class);
+		}
+		
+		return productInventoryMapper.findByProductId(productId);
 	}
 
 }
