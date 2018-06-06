@@ -42,8 +42,9 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
 		return productInventoryMapper.findById(id);
 	}
 
+	@Override
 	public ProductInventory findByProductId(Long productId) {
-		
+
 		Jedis jedis = jedisPool.getResource();
 		String dataJson = jedis.get("product_inventory_" + productId);
 		if (!Strings.isNullOrEmpty(dataJson)) {
@@ -51,8 +52,9 @@ public class ProductInventoryServiceImpl implements ProductInventoryService {
 			dataJSONObject.put("id", "-1");
 			return JSONObject.parseObject(dataJSONObject.toJSONString(), ProductInventory.class);
 		}
-		
-		return productInventoryMapper.findByProductId(productId);
+
+		ProductInventory productInventory = productInventoryMapper.findByProductId(productId);
+		return productInventory;
 	}
 
 }
